@@ -1,0 +1,26 @@
+name: iOS build & tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Unit tests (split & balance logic)
+        run: swift test
+
+      - name: Build app for iOS Simulator
+        run: |
+          xcodebuild build \
+            -project WhatsMyShare.xcodeproj \
+            -scheme WhatsMyShare \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO
